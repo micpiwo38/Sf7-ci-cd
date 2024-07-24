@@ -40,6 +40,9 @@ jobs:
         # Installe les dépendances du projet.
         run: composer install --prefer-dist --no-progress
 
+      - name: Set database URL
+        run: echo "DATABASE_URL="mysql://root@127.0.0.1:3306/symfony_cicd" > .env
+
       - name: Run database migrations
         # Exécute les migrations de la base de données.
         run: php bin/console doctrine:migrations:migrate --no-interaction
