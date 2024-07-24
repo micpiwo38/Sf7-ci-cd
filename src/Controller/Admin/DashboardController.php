@@ -45,7 +45,6 @@ class DashboardController extends AbstractDashboardController
             ->renderSidebarMinimized()
             ->generateRelativeUrls()
             ->setLocales(['fr']);
-
     }
 
     public function configureMenuItems(): iterable
@@ -56,6 +55,5 @@ class DashboardController extends AbstractDashboardController
         if($this->isGranted(["ROLE_SUPER_ADMIN","ROLE_ADMIN"])){
             yield MenuItem::linkToCrud('UTILISATEURS', 'fas fa-user', User::class);
         }
-
     }
 }

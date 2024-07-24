@@ -55,7 +55,8 @@ class ProduitsCrudController extends AbstractCrudController
             BooleanField::new('stock', 'Produit en stock'),
             AssociationField::new('categorie', 'Catégorie du produit')->autocomplete(),
             AssociationField::new('user', 'Nom du vendeur')->setFormTypeOptions([
-                'query_builder' => function () use ($user){
+                'query_builder' => function () use ($user)
+                {
                     return $this->em->getRepository(User::class)->createQueryBuilder('u')
                         ->where('u.email = :email')
                         ->setParameter('email', $user->getUserIdentifier());
@@ -70,13 +71,12 @@ class ProduitsCrudController extends AbstractCrudController
     {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
-        //Filter les produits par utilisateur connecté
-        if($this->isGranted('ROLE_USER')){
+        // Filter les produits par utilisateur connecté
+        if($this->isGranted('ROLE_USER'))
+        {
             $qb->andWhere('entity.user = :user')
                 ->setParameter('user', $user->getId());
         }
         return $qb;
-
     }
-
 }

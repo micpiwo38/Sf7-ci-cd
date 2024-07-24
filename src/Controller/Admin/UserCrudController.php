@@ -17,7 +17,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-
 class UserCrudController extends AbstractCrudController
 {
     private UserPasswordHasherInterface $passwordEncoder;
@@ -93,10 +92,12 @@ class UserCrudController extends AbstractCrudController
         return $formBuilder;
     }
 
-    protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder, $plainPassword = null):void{
-        $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword){
+    protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder, $plainPassword = null): void{
+        $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword)
+        {
             $user = $event->getData();
-            if($user->getPassword() !== $plainPassword){
+            if ($user->getPassword() !== $plainPassword)
+            {
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
             }
         });
