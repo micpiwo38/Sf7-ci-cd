@@ -62,7 +62,7 @@
     },
     "scripts": {
         "test": "php bin/phpunit",
-        "lint": "php bin/console lint:yaml config && php nin/console lint:twig templates && php bin/console lint:container",
+        "lint": "php bin/console lint:yaml config && php bin/console lint:twig templates && php bin/console lint:container",
         "cs-check": "phpcs src",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",

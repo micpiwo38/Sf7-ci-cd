@@ -72,7 +72,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: ./
-          remote_path: /path/to/remote/app
+          remote_path: https://github.com/micpiwo38/Sf7-ci-cd.git
           remote_host: ${{ secrets.REMOTE_HOST }}
           remote_user: ${{ secrets.REMOTE_USER }}
 
