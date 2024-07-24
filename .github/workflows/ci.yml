@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: symfony_cicd
+
+    steps:
+      - name: Checkout code
+        # Récupère le code du dépôt.
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        # Configure l'environnement PHP avec les extensions nécessaires.
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: mbstring, intl, pdo_mysql
+          ini-values: post_max_size=256M, max_execution_time=300
+          coverage: none
+
+      - name: Install Composer dependencies
+        # Installe les dépendances du projet.
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run database migrations
+        # Exécute les migrations de la base de données.
+        run: php bin/console doctrine:migrations:migrate --no-interaction
+
+      - name: Run linting
+        # Exécute les vérifications de syntaxe.
+        run: composer lint
+
+      - name: Run code style check
+        # Exécute les vérifications de style de code.
+        run: composer cs-check
+
+      - name: Run tests
+        # Exécute les tests phpunit.
+        run: composer test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Sync files to server
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzr --delete
+          path: ./
+          remote_path: /path/to/remote/app
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+

@@ -61,6 +61,9 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
+        "test": "php bin/phpunit",
+        "lint": "php bin/console lint:yaml config && php nin/console lint:twig templates && php bin/console lint:container",
+        "cs-check": "phpcs src",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
@@ -77,13 +80,15 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "7.1.*"
         }
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.60",
         "symfony/stopwatch": "7.1.*",
-        "symfony/web-profiler-bundle": "7.1.*"
+        "symfony/web-profiler-bundle": "7.1.*",
+        "phpunit/phpunit": "11.2.8",
+        "squizlabs/php_codesniffer": "3.10.2"
     }
 }
